@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>MTS4YOU XD - Order Panel Pterodactyl</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0a0c10;
+            color: #e0e0e0;
+            font-family: 'Segoe UI', 'Poppins', system-ui, -apple-system, BlinkMacSystemFont, 'Roboto', sans-serif;
+            line-height: 1.5;
+            padding: 0;
+        }
+
+        /* Navbar */
+        .navbar {
+            background: #0f1117;
+            border-bottom: 1px solid #1f2128;
+            padding: 0.8rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #c084fc, #60a5fa);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            color: #9ca3af;
+            text-decoration: none;
+            transition: 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: #c084fc;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background: linear-gradient(135deg, #0f1117 0%, #0a0c10 100%);
+            border-radius: 2rem;
+            border: 1px solid #1f2128;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, #c084fc, #60a5fa);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            color: #9ca3af;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Tabs Private/Public */
+        .tabs {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .tab-btn {
+            background: #111318;
+            border: 1px solid #2c2f36;
+            padding: 0.75rem 2rem;
+            border-radius: 2rem;
+            color: #9ca3af;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .tab-btn.active {
+            background: #8b5cf6;
+            border-color: #8b5cf6;
+            color: white;
+            box-shadow: 0 0 10px rgba(139, 92, 246, 0.3);
+        }
+
+        .tab-btn:hover:not(.active) {
+            border-color: #8b5cf6;
+            color: #c084fc;
+        }
+
+        /* Packages Grid */
+        .packages-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .package-card {
+            background: #111318;
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            border: 1px solid #262a33;
+            transition: all 0.2s;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .package-card:hover {
+            transform: translateY(-4px);
+            border-color: #8b5cf6;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .package-card.selected {
+            border: 2px solid #8b5cf6;
+            background: #181c2a;
+            box-shadow: 0 0 0 1px #8b5cf6;
+        }
+
+        .package-badge {
+            position: absolute;
+            top: -10px;
+            right: 1rem;
+            background: #facc15;
+            color: #1a1d26;
+            padding: 0.25rem 0.75rem;
+            border-radius: 2rem;
+            font-size: 0.7rem;
+            font-weight: 700;
+        }
+
+        .package-name {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: #f0f0f0;
+            padding-right: 4rem;
+        }
+
+        .package-price {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #facc15;
+            margin: 0.75rem 0;
+        }
+
+        .package-specs {
+            list-style: none;
+            margin: 1rem 0;
+            font-size: 0.85rem;
+            color: #bcbcbc;
+        }
+
+        .package-specs li {
+            margin: 0.5rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Order Form */
+        .order-section {
+            background: #0f1117;
+            border-radius: 2rem;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid #23262e;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #d1d5db;
+            font-size: 0.9rem;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: #1a1d26;
+            border: 1px solid #2d313c;
+            border-radius: 1rem;
+            color: white;
+            font-size: 0.9rem;
+            outline: none;
+            transition: 0.2s;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            border-color: #8b5cf6;
+            box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.2);
+        }
+
+        .btn-primary {
+            background: linear-gradient(95deg, #8b5cf6, #6d28d9);
+            border: none;
+            color: white;
+            font-weight: 700;
+            padding: 1rem 2rem;
+            border-radius: 2rem;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.2s;
+            width: 100%;
+        }
+
+        .btn-primary:hover {
+            opacity: 0.9;
+            transform: scale(0.98);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Payment Info */
+        .payment-info {
+            background: #0b0d12;
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+            border-left: 4px solid #facc15;
+        }
+
+        .dana-number {
+            font-size: 1.4rem;
+            font-weight: 800;
+            background: #1e2a1f;
+            display: inline-block;
+            padding: 0.5rem 1.5rem;
+            border-radius: 3rem;
+            color: #facc15;
+            margin: 0.5rem 0;
+        }
+
+        .warning-text {
+            background: #2c1517;
+            color: #f87171;
+            padding: 0.75rem;
+            border-radius: 1rem;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            font-size: 0.85rem;
+        }
+
+        .faq-section {
+            margin-top: 2rem;
+            background: #0f1117;
+            border-radius: 2rem;
+            padding: 2rem;
+        }
+
+        .faq-section h3 {
+            margin-bottom: 1.5rem;
+            font-size: 1.3rem;
+        }
+
+        details {
+            margin-bottom: 1rem;
+            background: #11141c;
+            padding: 1rem 1.5rem;
+            border-radius: 1rem;
+        }
+
+        summary {
+            font-weight: 600;
+            cursor: pointer;
+            color: #cbd5e6;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 2rem;
+            background: #0f1117;
+            border-radius: 2rem;
+            padding: 2rem;
+            margin: 2rem 0;
+            text-align: center;
+        }
+
+        .stat-item h2 {
+            font-size: 2rem;
+            color: #c084fc;
+        }
+
+        .stat-item p {
+            color: #9ca3af;
+        }
+
+        footer {
+            margin-top: 3rem;
+            text-align: center;
+            font-size: 0.8rem;
+            color: #6b7280;
+            border-top: 1px solid #1f2128;
+            padding-top: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            .navbar {
+                flex-direction: column;
+                text-align: center;
+            }
+            .package-name {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">⚡ MTS4YOU XD</div>
+        <div class="nav-links">
+            <a href="#">Home</a>
+            <a href="#">Riwayat</a>
+            <a href="#">Garansi</a>
+            <a href="#">Bell ADP</a>
+            <a href="#">Community</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="hero">
+            <h1>⚡ Panel Pterodactyl Premium ⚡</h1>
+            <p>Penyedia panel Pterodactyl terbaik dengan harga terjangkau dan kualitas premium. Performa server 2.7GHz yang cepat dan stabil untuk menjalankan bot Anda tanpa kendala.</p>
+        </div>
+
+        <div class="warning-text">
+            ⚠️ QRIS tidak tersedia saat ini. Hanya tersedia pembayaran via <strong>DANA 085137572401 (PLTS PROJECT)</strong>. 
+            Transfer sesuai total harga, lalu upload bukti & isi form di bawah. Jika DANA anda belum premium silahkan order manual ke <a href="https://wa.me/6285137572401" style="color: #facc15;">owner klik di sini</a>
+        </div>
+
+        <!-- Tabs Private/Public -->
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="public">📡 Public Server</button>
+            <button class="tab-btn" data-tab="private">🔒 Private Server</button>
+        </div>
+
+        <!-- Packages Grid -->
+        <div id="packagesContainer"></div>
+
+        <!-- Order Form -->
+        <div class="order-section">
+            <h3 style="margin-bottom: 1.5rem;">📝 Data Pemesan & Bukti Transfer</h3>
+            <form id="orderForm">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Username (min 3 karakter, huruf/angka)</label>
+                        <input type="text" id="username" placeholder="Contoh: botku123" required pattern="[A-Za-z0-9]{3,}">
+                    </div>
+                    <div class="form-group">
+                        <label>Email (kredensial panel akan dikirim ke sini)</label>
+                        <input type="email" id="email" placeholder="email@domain.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Nomor WhatsApp Anda (aktif)</label>
+                        <input type="tel" id="whatsapp" placeholder="08xxxxxxxxxx" required>
+                    </div>
+                </div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Paket terpilih</label>
+                        <input type="text" id="selectedPackageName" readonly placeholder="Klik paket di atas" style="background:#0f1117;">
+                    </div>
+                    <div class="form-group">
+                        <label>Total harga (IDR)</label>
+                        <input type="text" id="selectedPrice" readonly placeholder="Rp 0" style="background:#0f1117;">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Upload Bukti Transfer (foto/screenshot)</label>
+                    <input type="file" id="buktiFile" accept="image/*" required>
+                    <small style="color:#6b7280;">Format: JPG, PNG, maksimal 5MB</small>
+                </div>
+                <div class="form-group">
+                    <label>Catatan (opsional)</label>
+                    <textarea id="notes" rows="2" placeholder="Misal: minta panel pterodactyl versi terbaru"></textarea>
+                </div>
+                <button type="button" id="submitProofBtn" class="btn-primary">📤 Kirim Bukti & Konfirmasi ke Owner</button>
+                <div id="statusMsg" style="margin-top: 1rem; text-align: center;"></div>
+            </form>
+
+            <div class="payment-info">
+                <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 1rem;">
+                    <div>
+                        <span style="font-size: 0.85rem;">📲 Transfer ke DANA :</span>
+                        <div class="dana-number">085137572401</div>
+                        <span>a.n <strong>PLTS PROJECT</strong></span>
+                        <p style="margin-top: 0.75rem;">Setelah transfer, <strong>upload bukti</strong> di atas dan klik kirim.</p>
+                    </div>
+                    <div>
+                        <a href="https://wa.me/6285137572401" target="_blank" class="btn-primary" style="background: #25D366; text-decoration: none; display: inline-block; width: auto;">💬 Chat Owner (Alternatif)</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats">
+            <div class="stat-item">
+                <h2 id="totalUsers">0</h2>
+                <p>Total Pengguna</p>
+            </div>
+            <div class="stat-item">
+                <h2 id="totalServers">0</h2>
+                <p>Total Server</p>
+            </div>
+            <div class="stat-item">
+                <h2 id="totalOrders">0</h2>
+                <p>Pembelian Sukses</p>
+            </div>
+        </div>
+
+        <!-- FAQ -->
+        <div class="faq-section">
+            <h3>❓ Pertanyaan Umum</h3>
+            <details>
+                <summary>Apa itu panel Pterodactyl?</summary>
+                <p style="margin-top: 0.75rem;">Panel manajemen game server & bot yang powerful, mendukung Node.js, Python, dll. Kami menyediakan akses penuh untuk bot anda.</p>
+            </details>
+            <details>
+                <summary>Apa kegunaan panel bot Pterodactyl?</summary>
+                <p style="margin-top: 0.75rem;">Untuk menjalankan script bot (WhatsApp bot, Telegram bot, dll) 24 jam nonstop dengan performa optimal.</p>
+            </details>
+            <details>
+                <summary>Apa keuntungannya menggunakan panel bot Pterodactyl?</summary>
+                <p style="margin-top: 0.75rem;">Akses penuh root, support berbagai bahasa pemrograman, resource dedicated, dan uptime 99.9%.</p>
+            </details>
+            <details>
+                <summary>Apa perbedaan panel Private dan Public?</summary>
+                <p style="margin-top: 0.75rem;">Private = server khusus (lebih aman, resource exclusive). Public = server bersama (lebih murah, resource shared).</p>
+            </details>
+            <details>
+                <summary>Bagaimana cara claim garansi?</summary>
+                <p style="margin-top: 0.75rem;">Garansi berlaku 30 hari, maksimal 5 kali penggantian. Hubungi owner via WhatsApp dengan menyertakan ID transaksi atau email pendaftaran.</p>
+            </details>
+            <details>
+                <summary>Mengapa saya tidak bisa membeli dua panel dengan email yang sama?</summary>
+                <p style="margin-top: 0.75rem;">Untuk mencegah penyalahgunaan dan memudahkan manajemen akun. Silakan gunakan email berbeda untuk pembelian multiple panel.</p>
+            </details>
+            <details>
+                <summary>Bagaimana jika saya lupa password panel?</summary>
+                <p style="margin-top: 0.75rem;">Hubungi owner via WhatsApp untuk reset password panel Anda.</p>
+            </details>
+        </div>
+
+        <footer>
+            © 2026 MTS4YOU XD. All rights reserved. | Syarat & Ketentuan | Kebijakan Privasi<br>
+            📞 Dukungan: WhatsApp 085137572401 | Telegram @mts4you
+        </footer>
+    </div>
+
+    <script>
+        // Data Paket (berdasarkan screenshots dan situs target)
+        const packagesData = {
+            public: [
+                { name: "@PANEL BOT 1.5GB (Public)", price: 1500, ram: "775 MB", disk: "775 MB", cpu: "30%" },
+                { name: "@PANEL BOT 2GB (Public)", price: 2000, ram: "1025 MB", disk: "1025 MB", cpu: "40%" },
+                { name: "@PANEL BOT 3GB (Public)", price: 3000, ram: "1255 MB", disk: "1255 MB", cpu: "50%" },
+                { name: "@PANEL BOT 4GB (Public)", price: 4000, ram: "2025 MB", disk: "2025 MB", cpu: "80%" },
+                { name: "@PANEL BOT 5GB (Public)", price: 5000, ram: "2275 MB", disk: "2275 MB", cpu: "90%" },
+                { name: "@PANEL BOT 6GB (Public)", price: 6000, ram: "3275 MB", disk: "3275 MB", cpu: "100%" },
+                { name: "@PANEL BOT 7GB (Public)", price: 7000, ram: "3525 MB", disk: "3525 MB", cpu: "140%" },
+                { name: "@PANEL BOT 7.5GB (Public)", price: 7500, ram: "3775 MB", disk: "3775 MB", cpu: "150%" },
+                { name: "@ADMIN PANEL (Public)", price: 25000, ram: "0 MB", disk: "0 MB", cpu: "Akses Admin Penuh" }
+            ],
+            private: [
+                { name: "ⓋPANEL BOT 1GB (Private)", price: 2000, ram: "1025 MB", disk: "1025 MB", cpu: "40%" },
+                { name: "ⓋPANEL BOT 1.5GB (Private)", price: 3000, ram: "1525 MB", disk: "1525 MB", cpu: "60%" },
+                { name: "ⓋPANEL BOT 2GB (Private)", price: 4000, ram: "2025 MB", disk: "2025 MB", cpu: "80%" },
+                { name: "ⓋPANEL BOT 2.5GB (Private)", price: 5000, ram: "2525 MB", disk: "2525 MB", cpu: "100%" },
+                { name: "ⓋPANEL BOT 3GB (Private)", price: 6000, ram: "3025 MB", disk: "3025 MB", cpu: "120%" },
+                { name: "ⓋPANEL BOT 3.5GB (Private)", price: 7000, ram: "3525 MB", disk: "3525 MB", cpu: "140%" },
+                { name: "ⓋPANEL BOT 4GB (Private)", price: 8000, ram: "4025 MB", disk: "4025 MB", cpu: "160%" },
+                { name: "ⓋPANEL BOT 4.5GB (Private)", price: 9000, ram: "4525 MB", disk: "4525 MB", cpu: "180%" },
+                { name: "ⓋPANEL BOT 5GB (Private)", price: 10000, ram: "5025 MB", disk: "5025 MB", cpu: "200%" },
+                { name: "ⓋPANEL BOT 5.5GB (Private)", price: 11000, ram: "5525 MB", disk: "5525 MB", cpu: "220%" },
+                { name: "ⓋPANEL BOT 6GB (Private)", price: 12000, ram: "6025 MB", disk: "6025 MB", cpu: "240%" },
+                { name: "ⓋPANEL BOT 6.5GB (Private)", price: 13000, ram: "6525 MB", disk: "6525 MB", cpu: "260%" },
+                { name: "ⓋPANEL BOT 7GB (Private)", price: 14000, ram: "7025 MB", disk: "7025 MB", cpu: "280%" },
+                { name: "ⓋPANEL BOT 8GB (Private)", price: 15000, ram: "7525 MB", disk: "7525 MB", cpu: "300%" },
+                { name: "ⓋPANEL BOT UNLIMITED (Private)", price: 17000, ram: "0 MB (Custom)", disk: "0 MB (Custom)", cpu: "0% (Custom)" },
+                { name: "ⓋPANEL BOT 1GB EXPRESS (Private)", price: 9500, ram: "1025 MB", disk: "1025 MB", cpu: "0% (Express)" },
+                { name: "ⓋPANEL BOT 2GB EXPRESS (Private)", price: 10500, ram: "2025 MB", disk: "2025 MB", cpu: "0% (Express)" },
+                { name: "ⓋPANEL BOT 3GB EXPRESS (Private)", price: 11500, ram: "3025 MB", disk: "3025 MB", cpu: "0% (Express)" }
+            ]
+        };
+
+        let selectedPackage = null;
+        let currentTab = 'public';
+
+        function renderPackages() {
+            const container = document.getElementById('packagesContainer');
+            const packages = packagesData[currentTab];
+            container.innerHTML = '';
+            
+            packages.forEach((pkg, idx) => {
+ const card = document.createElement('div');
+                card.className = 'package-card';
+                card.innerHTML = `
+                    ${pkg.name.includes('UNLIMITED') || pkg.name.includes('EXPRESS') ? '<div class="package-badge">⭐ BEST SELLER</div>' : ''}
+                    <div class="package-name">${pkg.name}</div>
+                    <div class="package-price">Rp ${pkg.price.toLocaleString('id-ID')}</div>
+                    <ul class="package-specs">
+                        <li>🧠 RAM: ${pkg.ram}</li>
+                        <li>💾 Disk: ${pkg.disk}</li>
+                        <li>⚙️ CPU: ${pkg.cpu}</li>
+                    </ul>
+                `;
+                card.onclick = () => {
+                    document.querySelectorAll('.package-card').forEach(c => c.classList.remove('selected'));
+                    card.classList.add('selected');
+                    selectedPackage = pkg;
+                    document.getElementById('selectedPackageName').value = pkg.name;
+                    document.getElementById('selectedPrice').value = `Rp ${pkg.price.toLocaleString('id-ID')}`;
+                };
+                container.appendChild(card);
+            });
+        }
+
+        // Tab switching
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentTab = btn.getAttribute('data-tab');
+                selectedPackage = null;
+                document.getElementById('selectedPackageName').value = '';
+                document.getElementById('selectedPrice').value = '';
+                renderPackages();
+            });
+        });
+
+        renderPackages();
+
+        // Order submission
+        const submitBtn = document.getElementById('submitProofBtn');
+        const statusDiv = document.getElementById('statusMsg');
+
+        submitBtn.addEventListener('click', async () => {
+            const username = document.getElementById('username').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const whatsapp = document.getElementById('whatsapp').value.trim();
+            const notes = document.getElementById('notes').value.trim();
+            const fileInput = document.getElementById('buktiFile');
+            const file = fileInput.files[0];
+
+            if (!selectedPackage) {
+                alert('❌ Silakan pilih paket terlebih dahulu!');
+                return;
+            }
+            if (username.length < 3 || !/^[A-Za-z0-9]+$/.test(username)) {
+                alert('⚠️ Username minimal 3 karakter dan hanya huruf/angka!');
+                return;
+            }
+            if (!email.includes('@') || !email.includes('.')) {
+                alert('⚠️ Masukkan email yang valid!');
+                return;
+            }
+            if (!whatsapp || !/^08\d{8,13}$/.test(whatsapp)) {
+                alert('⚠️ Nomor WhatsApp tidak valid (contoh: 081234567890)');
+                return;
+            }
+            if (!file) {
+                alert('⚠️ Upload bukti transfer terlebih dahulu!');
+                return;
+            }
+
+            statusDiv.innerHTML = '<span style="color: #facc15;">⏳ Mengirim bukti ke owner...</span>';
+            submitBtn.disabled = true;
+
+            // Baca file sebagai base64
+            const reader = new FileReader();
+            reader.onloadend = async function() {
+                const base64Image = reader.result;
+
+                const payload = {
+                    username,
+                    email,
+                    packageName: selectedPackage.name,
+                    totalPrice: selectedPackage.price,
+                    whatsappNumber: whatsapp,
+                    notes: notes || '-',
+                    imageBase64: base64Image,
+                    imageMime: file.type
+                };
+
+                try {
+                    const response = await fetch('/api/submit-order', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    const result = await response.json();
+                    if (response.ok) {
+                        statusDiv.innerHTML = '<span style="color: #4ade80;">✅ Bukti terkirim! Owner akan segera memproses dan menghubungi Anda via WhatsApp/Email.</span>';
+                        document.getElementById('orderForm').reset();
+                        document.getElementById('selectedPackageName').value = '';
+                        document.getElementById('selectedPrice').value = '';
+                        selectedPackage = null;
+                        document.querySelectorAll('.package-card').forEach(c => c.classList.remove('selected'));
+                        fileInput.value = '';
+                        // Update stats after successful order
+                        updateStats();
+                    } else {
+                        statusDiv.innerHTML = `<span style="color: #f87171;">❌ Gagal: ${result.error || 'Coba lagi nanti'}</span>`;
+                    }
+                } catch (err) {
+                    statusDiv.innerHTML = `<span style="color: #f87171;">❌ Error jaringan: ${err.message}</span>`;
+                } finally {
+                    submitBtn.disabled = false;
+                }
+            };
+            reader.readAsDataURL(file);
+        });
+
+        // Simulate stats update (from localStorage or API)
+        function updateStats() {
+            let users = parseInt(localStorage.getItem('totalUsers') || '1418');
+            let servers = parseInt(localStorage.getItem('totalServers') || '1551');
+            let orders = parseInt(localStorage.getItem('totalOrders') || '1551');
+            
+            orders += 1;
+            if (orders % 5 === 0) {
+                users += 1;
+                servers += 1;
+            }
+            
+            localStorage.setItem('totalUsers', users);
+            localStorage.setItem('totalServers', servers);
+            localStorage.setItem('totalOrders', orders);
+            
+            document.getElementById('totalUsers').innerText = users;
+            document.getElementById('totalServers').innerText = servers;
+            document.getElementById('totalOrders').innerText = orders;
+        }
+        
+        function loadStats() {
+            document.getElementById('totalUsers').innerText = localStorage.getItem('totalUsers') || '1418';
+            document.getElementById('totalServers').innerText = localStorage.getItem('totalServers') || '1551';
+            document.getElementById('totalOrders').innerText = localStorage.getItem('totalOrders') || '1551';
+        }
+        
+        loadStats();
+    </script>
+</body>
+</html>
