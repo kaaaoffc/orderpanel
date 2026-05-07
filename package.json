@@ -1,0 +1,21 @@
+{
+  "name": "kaaaoffc-panel-order",
+  "version": "1.0.0",
+  "description": "KAAA OFFC XD - Order Panel Pterodactyl with Telegram & Email Notifications",
+  "main": "index.html",
+  "scripts": {
+    "dev": "vercel dev",
+    "build": "echo \"No build step required\""
+  },
+  "dependencies": {
+    "node-fetch": "^2.7.0",
+    "form-data": "^4.0.0",
+    "resend": "^3.5.0",
+    "busboy": "^1.6.0"
+  },
+  "engines": {
+    "node": ">=18.x"
+  },
+  "author": "KAAA OFFC XD",
+  "license": "MIT"
+}
